@@ -1,10 +1,15 @@
 import React from 'react';
 import {createRoot} from 'react-dom/client';
+import SettingsProvider from "./Context/Settings";
 
 import App from './app.js';
 
 function Main() {
-    return <App />;
+    return (
+        <SettingsProvider>
+            <App />
+        </SettingsProvider>
+    ) ;
 }
 
 const container = document.getElementById('root');
