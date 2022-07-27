@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import useForm from '../../hooks/form.js';
 import {SettingsContext} from "../../Context/Settings";
+import DisplayFilter from "../filter/filter";
 import Header from "../header/Header";
 import './todo.css'
 
@@ -21,6 +22,7 @@ const ToDo = () => {
 
   function addItem(item) {
     item.id = uuid();
+    item.order = list.length
     item.complete = settings.completed;
     console.log(item);
     setList([...list, item]);
@@ -32,27 +34,46 @@ const ToDo = () => {
   }
 
   function toggleComplete(id) {
-
     const items = list.map( item => {
       if ( item.id === id ) {
         item.complete = ! item.complete;
       }
       return item;
     });
-
     setList(items);
+  }
 
+  function itemsOnScreen(number) {
+    settings.updateItemsPerScreen(number)
+  }
+
+  function listFilter (value) {
+    const filteredList = [...list]
+    if (value === 'Difficulty') {
+      const difficulty = filteredList.sort((a, b) => a.difficulty - b.difficulty)
+      setList(difficulty)
+    } else if (value === 'Newest') {
+      const newest = filteredList.sort((a, b) => b.order - a.order)
+      setList(newest)
+    } else if (value === 'Oldest') {
+      const oldest = filteredList.sort((a, b) => a.order - b.order)
+      setList(oldest)
+    }
+  }
+
+  function itemsPerPage (value) {
+    setEnd(value)
   }
 
 
   function handleNextPageChange () {
-    setStart((start) => start + 3)
-    setEnd((end) => end + 3)
+    setStart((start) => start + settings.itemsPerScreen)
+    setEnd((end) => end + settings.itemsPerScreen)
   }
 
   function handlePreviousPageChange () {
-    setStart((start) => start - 3)
-    setEnd((end) => end - 3)
+    setStart((start) => start - settings.itemsPerScreen)
+    setEnd((end) => end - settings.itemsPerScreen)
   }
 
   useEffect(() => {
@@ -89,6 +110,8 @@ const ToDo = () => {
         </label>
       </form>
 
+      <DisplayFilter listFilter={listFilter} itemsPerPage={itemsPerPage}/>
+
       <div className="todo-list">
         {list.slice(start, end).map(item => (
             <div key={item.id} className="bp4-card bp4-elevation-2">
@@ -96,6 +119,7 @@ const ToDo = () => {
               <p><small>Assigned to: {item.assignee}</small></p>
               <p><small>Difficulty: {item.difficulty}</small></p>
               <div onClick={() => toggleComplete(item.id)}>Complete: {item.complete.toString()}</div>
+              <button className="bp4-button delete-button" onClick={() => deleteItem(item.id)}>Delete</button>
             </div>
         ))}
       </div>
