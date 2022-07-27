@@ -6,12 +6,27 @@ export default function SettingsProvider({children}) {
 
     const [completed, setCompleted] = useState(false)
     const [itemsPerScreen, setItemsPerScreen] = useState(3)
-    const [sortField, setSortField] = useState('')
+    const [sortField, setSortField] = useState('completed')
+
+    const updateCompleted = () => {
+        setCompleted(!completed)
+    }
+
+    const updateItemsPerScreen = (val) => {
+        setItemsPerScreen(val)
+    }
+
+    const updateSortField = (val) => {
+        setSortField(val)
+    }
 
     const settings = {
         completed,
         itemsPerScreen,
-        sortField
+        sortField,
+        updateCompleted,
+        updateItemsPerScreen,
+        updateSortField
     }
 
     return (
