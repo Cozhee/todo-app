@@ -18,6 +18,7 @@ const ToDo = () => {
   const [incomplete, setIncomplete] = useState([]);
   const [start, setStart] = useState(0)
   const [end, setEnd] = useState(settings.itemsPerScreen)
+  const [showCompleted, setShowCompleted] = useState(settings.completed)
   const { handleChange, handleSubmit } = useForm(addItem, defaultValues);
 
   function addItem(item) {
@@ -34,17 +35,16 @@ const ToDo = () => {
   }
 
   function toggleComplete(id) {
-    const items = list.map( item => {
+    let items;
+
+    items = list.map( item => {
       if ( item.id === id ) {
         item.complete = ! item.complete;
       }
       return item;
-    });
-    setList(items);
-  }
+    })
 
-  function itemsOnScreen(number) {
-    settings.updateItemsPerScreen(number)
+    setList(items)
   }
 
   function listFilter (value) {

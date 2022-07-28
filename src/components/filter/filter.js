@@ -1,10 +1,8 @@
-import {useContext, useEffect, useState} from 'react'
+import {useEffect, useState} from 'react'
 import './filter.css'
-import { SettingsContext } from "../../Context/Settings";
 
 export default function DisplayFilter({ listFilter, itemsPerPage }) {
 
-    const settings = useContext(SettingsContext)
 
     const options = ['Difficulty', 'Newest', 'Oldest']
     const itemsOnScreen = [3, 6, 10]
@@ -49,6 +47,11 @@ export default function DisplayFilter({ listFilter, itemsPerPage }) {
                     })}
                 </select>
                 <span className="bp4-icon bp4-icon-double-caret-vertical"></span>
+                <label className="bp4-control bp4-checkbox checkbox">
+                    <input type="checkbox"/>
+                    <span className="bp4-control-indicator"></span>
+                    Show completed
+                </label>
             </div>
         </>
     )
